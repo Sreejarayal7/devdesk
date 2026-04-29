@@ -1,3 +1,4 @@
+import Charts from './components/Charts'
 import PomodoroTimer from './components/PomodoroTimer'
 import { useState, useMemo, useEffect } from 'react'
 import { auth, logOut } from './firebase'
@@ -19,6 +20,7 @@ export default function App() {
   const [dark,      setDark]      = useState(false)
   const [subjects,  setSubjects]  = useState(DEFAULT_SUBJECTS)
   const [filters,   setFilters]   = useState({ status: 'All', subject: 'All', type: 'All' })
+  const [showCharts, setShowCharts] = useState(false)
 
   // Listen for login/logout
   useEffect(() => {
@@ -129,10 +131,36 @@ export default function App() {
         {/* Pomodoro Timer */}
         <PomodoroTimer />
 
-        <TaskForm onAdd={addTask} subjects={subjects} onAddSubject={addSubject} onRemoveSubject={removeSubject} />
-        <SearchBar search={search} setSearch={setSearch} />
-        <FilterBar filters={filters} setFilters={setFilters} subjects={subjects} />
-        <TaskList tasks={filtered} onToggle={toggleTask} onDelete={deleteTask} />
+        {/* Charts toggle */}
+<button
+  onClick={() => setShowCharts(s => !s)}
+  style={{
+    width: '100%',
+    padding: '12px',
+    borderRadius: 14,
+    border: '2px solid #e0f2fe',
+    background: showCharts ? '#0ea5e9' : 'white',
+    color: showCharts ? 'white' : '#0ea5e9',
+    fontSize: '0.9rem',
+    fontWeight: 700,
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+  }}
+>
+  {showCharts ? '📋 Show Tasks' : '📊 Show Analytics'}
+</button>
+
+{showCharts
+  ? <Charts tasks={tasks} />
+  : <>
+      <TaskForm onAdd={addTask} subjects={subjects} onAddSubject={addSubject} onRemoveSubject={removeSubject} />
+      <SearchBar search={search} setSearch={setSearch} />
+      <FilterBar filters={filters} setFilters={setFilters} subjects={subjects} />
+      <TaskList tasks={filtered} onToggle={toggleTask} onDelete={deleteTask} />
+    </>
+}
+        
 
         <div className="footer">
           💻 DevDesk · Built for CSE Students · {new Date().getFullYear()}
