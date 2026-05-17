@@ -12,6 +12,10 @@ import PomodoroTimer from "./components/PomodoroTimer";
 import AIStudyPlan from "./components/AIStudyPlan";
 import Timetable from "./components/Timetable";
 import AIChat from "./components/AIChat";
+import Logo from "./components/Logo";
+import HabitTracker from "./components/HabitTracker";
+import Notes from "./components/Notes";
+import Gamification from "./components/Gamification";
 
 const DEFAULT_SUBJECTS = ["Data Structures", "Machine Learning"];
 
@@ -83,7 +87,7 @@ export default function App() {
         }}
       >
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: "3rem", marginBottom: 12 }}>🖥️</div>
+          <div style={{ fontSize: "3rem", marginBottom: 12 }}>🧠</div>
           <p style={{ color: "#0ea5e9", fontWeight: 700 }}>
             Loading DevDesk...
           </p>
@@ -92,6 +96,16 @@ export default function App() {
     );
 
   if (!user) return <Login />;
+
+  const TABS = [
+    { id: "tasks", label: "📋 Tasks" },
+    { id: "habits", label: "🎯 Habits" },
+    { id: "notes", label: "📝 Notes" },
+    { id: "xp", label: "🏆 XP & Badges" },
+    { id: "timetable", label: "📅 Timetable" },
+    { id: "chat", label: "🧠 AI Chat" },
+    { id: "analytics", label: "📊 Analytics" },
+  ];
 
   return (
     <div className={dark ? "dark" : ""}>
@@ -143,10 +157,21 @@ export default function App() {
           </div>
         </div>
 
-        {/* Header */}
-        <div className="header">
-          <h1>🖥️ DevDesk</h1>
-          <p>Your personal CSE study & task tracker</p>
+        {/* Header with Brain Logo */}
+        <div
+          className="header"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 16,
+          }}
+        >
+          <Logo size={52} />
+          <div>
+            <h1 style={{ margin: 0 }}>DevDesk</h1>
+            <p style={{ margin: 0 }}>Your personal CSE study & task tracker</p>
+          </div>
         </div>
 
         {/* Stats */}
@@ -181,7 +206,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Pomodoro Timer */}
+        {/* Pomodoro + AI Study Plan */}
         <div className="two-col">
           <PomodoroTimer />
           <AIStudyPlan onAddTask={addTask} subjects={subjects} />
@@ -189,22 +214,17 @@ export default function App() {
 
         {/* Tab switcher */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {[
-            { id: "tasks", label: "📋 Tasks" },
-            { id: "timetable", label: "📅 Timetable" },
-            { id: "chat", label: "🧠 AI Chat" },
-            { id: "analytics", label: "📊 Analytics" },
-          ].map((tab) => (
+          {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               style={{
-                padding: "10px 20px",
+                padding: "10px 16px",
                 borderRadius: 14,
                 border: activeTab === tab.id ? "none" : "2px solid #e2e8f0",
                 background: activeTab === tab.id ? "#0ea5e9" : "white",
                 color: activeTab === tab.id ? "white" : "#64748b",
-                fontSize: "0.85rem",
+                fontSize: "0.82rem",
                 fontWeight: 700,
                 cursor: "pointer",
                 boxShadow:
@@ -247,15 +267,16 @@ export default function App() {
           </div>
         )}
 
+        {activeTab === "habits" && <HabitTracker />}
+        {activeTab === "notes" && <Notes />}
+        {activeTab === "xp" && <Gamification tasks={tasks} />}
         {activeTab === "timetable" && <Timetable />}
-
         {activeTab === "chat" && <AIChat />}
-
         {activeTab === "analytics" && <Charts tasks={tasks} />}
 
         {/* Footer */}
         <div className="footer">
-          💻 DevDesk · Built for CSE Students · {new Date().getFullYear()}
+          🧠 DevDesk · Built for CSE Students · {new Date().getFullYear()}
         </div>
       </div>
     </div>
