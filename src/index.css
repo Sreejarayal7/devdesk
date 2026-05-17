@@ -16,12 +16,75 @@ body.dark {
 }
 
 .app {
-  max-width: 700px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 16px;
-  display: flex;
-  flex-direction: column;
+  padding: 32px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "topbar topbar"
+    "header header"
+    "stats stats"
+    "progress progress"
+    "timer ai"
+    "toggle toggle"
+    "main main"
+    "footer footer";
   gap: 20px;
+}
+
+/* Assign grid areas */
+.app > .topbar       { grid-area: topbar; }
+.app > .header       { grid-area: header; }
+.app > .stats        { grid-area: stats; }
+.app > .progress-card { grid-area: progress; }
+.app > .tasks-section { grid-area: main; }
+.app > .footer       { grid-area: footer; }
+
+/* Two column for timer and AI side by side */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  grid-area: timer;
+}
+
+/* Stats row — 3 equal columns */
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+/* Main content two columns */
+.main-content {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.main-left { display: flex; flex-direction: column; gap: 16px; }
+.main-right { display: flex; flex-direction: column; gap: 16px; }
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "topbar"
+      "header"
+      "stats"
+      "progress"
+      "timer"
+      "ai"
+      "toggle"
+      "main"
+      "footer";
+  }
+  .two-col { grid-template-columns: 1fr; }
+  .main-content { grid-template-columns: 1fr; }
 }
 
 /* ── Header ── */

@@ -6,7 +6,6 @@ export function useTasks(userId) {
 
   const [tasks, setTasks] = useState([])
 
-  // Load from localStorage when userId is ready
   useEffect(() => {
     if (!userId) return
     try {
@@ -19,7 +18,6 @@ export function useTasks(userId) {
     }
   }, [userId, KEY])
 
-  // Save to localStorage whenever tasks change
   useEffect(() => {
     if (!initialized.current) return
     if (!userId) return
@@ -31,6 +29,7 @@ export function useTasks(userId) {
       id: crypto.randomUUID(),
       createdAt: new Date().toISOString(),
       completed: false,
+      subtasks: [],
       ...task
     }, ...prev])
   }
@@ -45,5 +44,11 @@ export function useTasks(userId) {
     ))
   }
 
-  return { tasks, loading: false, addTask, deleteTask, toggleTask }
+  const updateSubtasks = (taskId, subtasks) => {
+    setTasks(prev => prev.map(t =>
+      t.id === taskId ? { ...t, subtasks } : t
+    ))
+  }
+
+  return { tasks, loading: false, addTask, deleteTask, toggleTask, updateSubtasks }
 }
